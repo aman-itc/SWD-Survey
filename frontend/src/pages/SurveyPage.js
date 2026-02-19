@@ -22,6 +22,7 @@ export default function SurveyPage() {
   const [sections, setSections] = useState([]);
   const [customers, setCustomers] = useState([]);
   const [success, setSuccess] = useState(false);
+  const [step, setStep] = useState(1); // Step 1: Details, Step 2: Survey Questions
 
   const [formData, setFormData] = useState({
     branch: "",
