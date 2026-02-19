@@ -94,6 +94,7 @@ export default function SurveyPage() {
   const handleSectionChange = (value) => {
     setFormData({ ...formData, section_code: value, dms_customer_id: "", dms_customer_name: "" });
     setCustomers([]);
+    setCompletionStats(null);
     fetchCustomers(value);
   };
 
