@@ -16,20 +16,33 @@ async def load_excel_data():
     # Clear existing data
     await db.survey_data.delete_many({})
     
-    # Load from the extracted data
-    # This is a sample - you'll need to parse the actual Excel file
-    sample_data = [
-        {"branch": "WAHM", "section_code": "AH4001", "dms_customer_id": "AH21431ITC035SFA062500158", "dms_customer_name": "PATEL TRADERS_230544"},
-        {"branch": "WAHM", "section_code": "AH4001", "dms_customer_id": "AH3193TRS253SFA072501667", "dms_customer_name": "BHAGY LAXMI JANRAL STOR"},
-        {"branch": "WAHM", "section_code": "AH4002", "dms_customer_id": "AH312310TRS351IMP042501086", "dms_customer_name": "HITESH TRADERS"},
-        {"branch": "WBHO", "section_code": "BHO001", "dms_customer_id": "BH3119CRM038967", "dms_customer_name": "EXE 23/24 OM PRAGATI KIRANA STORE AMONA"},
-        {"branch": "WMUM", "section_code": "MU4001", "dms_customer_id": "MU332811ITC415134", "dms_customer_name": "MAHESH TOBACCO"},
-        {"branch": "WPUN", "section_code": "PUR002", "dms_customer_id": "PU4037CRM003GB122", "dms_customer_name": "MINAR GOLI"},
-    ]
+    # Load Excel file
+    excel_file = ROOT_DIR / "Final_SWD_List.xlsx"
     
-    if sample_data:
-        await db.survey_data.insert_many(sample_data)
-        print(f"Loaded {len(sample_data)} records into database")
+    if not excel_file.exists():
+        print(f"Excel file not found at {excel_file}")
+        return
+    
+    wb = openpyxl.load_workbook(excel_file)
+    ws = wb.active
+    
+    data_list = []
+    
+    # Skip header row and read data
+    for row in ws.iter_rows(min_row=2, values_only=True):
+        if row[0] and row[1] and row[2] and row[3]:  # Ensure all required fields exist
+            data_list.append({
+                "branch": str(row[0]).strip(),
+                "section_code": str(row[1]).strip(),
+                "dms_customer_id": str(row[2]).strip(),
+                "dms_customer_name": str(row[3]).strip()
+            })
+    
+    if data_list:
+        await db.survey_data.insert_many(data_list)
+        print(f"Loaded {len(data_list)} records into database")
+    else:
+        print("No data found in Excel file")
     
     client.close()
 
