@@ -163,34 +163,47 @@ export default function AdminDashboard() {
       </header>
 
       <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Statistics Cards */}
-        {stats && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <Card className="p-6">
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider">Total Responses</h3>
-                <FileText className="w-5 h-5 text-slate-400" />
-              </div>
-              <p className="text-3xl font-bold text-slate-900" data-testid="total-responses">{stats.total_responses}</p>
-            </Card>
+        <Tabs defaultValue="responses" className="space-y-6">
+          <TabsList className="bg-slate-100 p-1">
+            <TabsTrigger value="responses" className="data-[state=active]:bg-white" data-testid="responses-tab">
+              <FileText className="w-4 h-4 mr-2" />
+              Survey Responses
+            </TabsTrigger>
+            <TabsTrigger value="questions" className="data-[state=active]:bg-white" data-testid="questions-tab">
+              <Settings className="w-4 h-4 mr-2" />
+              Manage Questions
+            </TabsTrigger>
+          </TabsList>
 
-            <Card className="p-6">
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider">Recent (7 Days)</h3>
-                <TrendingUp className="w-5 h-5 text-slate-400" />
-              </div>
-              <p className="text-3xl font-bold text-slate-900" data-testid="recent-responses">{stats.recent_responses}</p>
-            </Card>
+          <TabsContent value="responses" className="space-y-6">
+            {/* Statistics Cards */}
+            {stats && (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <Card className="p-6">
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider">Total Responses</h3>
+                    <FileText className="w-5 h-5 text-slate-400" />
+                  </div>
+                  <p className="text-3xl font-bold text-slate-900" data-testid="total-responses">{stats.total_responses}</p>
+                </Card>
 
-            <Card className="p-6">
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider">Branches Covered</h3>
-                <BarChart3 className="w-5 h-5 text-slate-400" />
+                <Card className="p-6">
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider">Recent (7 Days)</h3>
+                    <TrendingUp className="w-5 h-5 text-slate-400" />
+                  </div>
+                  <p className="text-3xl font-bold text-slate-900" data-testid="recent-responses">{stats.recent_responses}</p>
+                </Card>
+
+                <Card className="p-6">
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider">Branches Covered</h3>
+                    <BarChart3 className="w-5 h-5 text-slate-400" />
+                  </div>
+                  <p className="text-3xl font-bold text-slate-900">{stats.responses_by_branch.length}</p>
+                </Card>
               </div>
-              <p className="text-3xl font-bold text-slate-900">{stats.responses_by_branch.length}</p>
-            </Card>
-          </div>
-        )}
+            )}
 
         {/* Filters */}
         <Card className="p-6 mb-6">
