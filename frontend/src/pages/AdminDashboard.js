@@ -80,10 +80,14 @@ export default function AdminDashboard() {
   };
 
   const handleFilterChange = (field, value) => {
-    setFilters({ ...filters, [field]: value });
-    if (field === "branch" && value) {
+    const actualValue = value === "all" ? "" : value;
+    setFilters({ ...filters, [field]: actualValue });
+    if (field === "branch" && value && value !== "all") {
       fetchSections(value);
-      setFilters({ ...filters, branch: value, section: "" });
+      setFilters({ ...filters, branch: actualValue, section: "" });
+    } else if (field === "branch" && (value === "all" || !value)) {
+      setSections([]);
+      setFilters({ ...filters, branch: "", section: "" });
     }
   };
 
