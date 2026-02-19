@@ -329,6 +329,31 @@ export default function SurveyPage() {
                     <p className="text-lg font-medium text-green-900" data-testid="customer-name">{formData.dms_customer_name}</p>
                   </div>
                 )}
+
+                {/* Section Completion Stats */}
+                {completionStats && (
+                  <div className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border-2 border-blue-200 animate-in fade-in slide-in-from-top-2">
+                    <div className="flex items-center justify-between mb-3">
+                      <div>
+                        <Label className="text-sm font-semibold text-blue-900 mb-1 block">Section Progress</Label>
+                        <p className="text-xs text-blue-700">
+                          {completionStats.completed_surveys} of {completionStats.total_dms_ids} outlets completed
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-3xl font-bold text-blue-600" data-testid="completion-percentage">
+                          {completionStats.completion_percentage}%
+                        </div>
+                      </div>
+                    </div>
+                    <div className="w-full bg-blue-100 rounded-full h-3 overflow-hidden">
+                      <div 
+                        className="bg-gradient-to-r from-blue-500 to-indigo-600 h-3 rounded-full transition-all duration-500 ease-out"
+                        style={{ width: `${completionStats.completion_percentage}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div className="flex justify-end mt-8">
