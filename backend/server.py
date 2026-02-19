@@ -320,6 +320,62 @@ async def export_responses(
         logging.error(f"Error exporting data: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+# Question Management Endpoints
+@api_router.get("/admin/questions")
+async def get_all_questions():
+    try:
+        questions = await db.survey_questions.find({}, {"_id": 0}).sort("question_number", 1).to_list(100)
+        return {"questions": questions}
+    except Exception as e:
+        logging.error(f"Error fetching questions: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.post("/admin/questions")
+async def create_question(question: QuestionCreate):
+    try:
+        new_question = SurveyQuestion(**question.model_dump())
+        doc = new_question.model_dump()
+        doc['created_at'] = doc['created_at'].isoformat()
+        doc['updated_at'] = doc['updated_at'].isoformat()
+        
+        await db.survey_questions.insert_one(doc)
+        return {"success": True, "question": new_question.model_dump(exclude={'created_at', 'updated_at'})}
+    except Exception as e:
+        logging.error(f"Error creating question: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.put("/admin/questions/{question_id}")
+async def update_question(question_id: str, question_update: QuestionUpdate):
+    try:
+        update_data = {k: v for k, v in question_update.model_dump().items() if v is not None}
+        update_data['updated_at'] = datetime.now(timezone.utc).isoformat()
+        
+        result = await db.survey_questions.update_one(
+            {"id": question_id},
+            {"$set": update_data}
+        )
+        
+        if result.modified_count == 0:
+            raise HTTPException(status_code=404, detail="Question not found")
+        
+        return {"success": True, "message": "Question updated"}
+    except Exception as e:
+        logging.error(f"Error updating question: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.delete("/admin/questions/{question_id}")
+async def delete_question(question_id: str):
+    try:
+        result = await db.survey_questions.delete_one({"id": question_id})
+        
+        if result.deleted_count == 0:
+            raise HTTPException(status_code=404, detail="Question not found")
+        
+        return {"success": True, "message": "Question deleted"}
+    except Exception as e:
+        logging.error(f"Error deleting question: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 app.include_router(api_router)
 
 app.add_middleware(
