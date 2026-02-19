@@ -69,6 +69,39 @@ class AdminResponse(BaseModel):
     token: str
     email: str
 
+class QuestionOption(BaseModel):
+    value: str
+    label: str
+
+class SurveyQuestion(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    question_number: int
+    question_text: str
+    question_type: str  # "single", "multi", "text"
+    options: List[QuestionOption] = []
+    is_mandatory: bool = True
+    has_conditional_input: bool = False
+    conditional_trigger: Optional[str] = None
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class QuestionCreate(BaseModel):
+    question_number: int
+    question_text: str
+    question_type: str
+    options: List[QuestionOption] = []
+    is_mandatory: bool = True
+    has_conditional_input: bool = False
+    conditional_trigger: Optional[str] = None
+
+class QuestionUpdate(BaseModel):
+    question_text: Optional[str] = None
+    question_type: Optional[str] = None
+    options: Optional[List[QuestionOption]] = None
+    is_mandatory: Optional[bool] = None
+    has_conditional_input: Optional[bool] = None
+    conditional_trigger: Optional[str] = None
+
 # Simple auth check
 def verify_admin(email: str, password: str) -> bool:
     return email == "vickyvikas@itc.in" and password == "vickyvikas"
