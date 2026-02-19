@@ -220,7 +220,7 @@ export default function AdminDashboard() {
                   <SelectValue placeholder="All Sections" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Sections</SelectItem>
+                  <SelectItem value="all">All Sections</SelectItem>
                   {sections.map(section => (
                     <SelectItem key={section} value={section}>{section}</SelectItem>
                   ))}
