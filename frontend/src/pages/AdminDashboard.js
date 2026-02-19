@@ -340,6 +340,12 @@ export default function AdminDashboard() {
             </Table>
           </div>
         </Card>
+          </TabsContent>
+
+          <TabsContent value="questions">
+            <QuestionManagement />
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
