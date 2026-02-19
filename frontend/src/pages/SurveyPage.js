@@ -93,6 +93,18 @@ export default function SurveyPage() {
     });
   };
 
+  const handleNextStep = () => {
+    if (!formData.branch || !formData.section_code || !formData.dms_customer_id) {
+      toast.error("Please select Branch, Section, and Customer");
+      return;
+    }
+    setStep(2);
+  };
+
+  const handleBackToDetails = () => {
+    setStep(1);
+  };
+
   const handleCheckboxChange = (field, value) => {
     const current = formData[field];
     const updated = current.includes(value)
