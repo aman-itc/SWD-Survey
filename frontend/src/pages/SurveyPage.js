@@ -67,8 +67,20 @@ export default function SurveyPage() {
     try {
       const response = await axios.get(`${API}/customers/${sectionCode}`);
       setCustomers(response.data.customers);
+      
+      // Also fetch completion stats for this section
+      fetchSectionCompletion(sectionCode);
     } catch (error) {
       toast.error("Failed to load customers");
+    }
+  };
+
+  const fetchSectionCompletion = async (sectionCode) => {
+    try {
+      const response = await axios.get(`${API}/section-completion/${sectionCode}`);
+      setCompletionStats(response.data);
+    } catch (error) {
+      console.error("Failed to load completion stats");
     }
   };
 
