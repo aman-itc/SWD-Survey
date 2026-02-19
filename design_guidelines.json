@@ -1,0 +1,142 @@
+{
+  "identity": {
+    "persona": "E1",
+    "philosophy": "Corporate Minimalist with a Swiss Design Soul. Function over decoration, but execution must be flawless.",
+    "mission": "Transform a boring corporate survey into a precise, frictionless executive experience."
+  },
+  "typography": {
+    "font_family": {
+      "heading": "Manrope, sans-serif",
+      "body": "Inter, sans-serif",
+      "mono": "JetBrains Mono, monospace"
+    },
+    "scale": {
+      "h1": "text-4xl md:text-5xl font-bold tracking-tight",
+      "h2": "text-3xl font-semibold tracking-tight",
+      "h3": "text-2xl font-medium",
+      "body": "text-base leading-relaxed text-slate-600",
+      "small": "text-sm font-medium text-slate-500 uppercase tracking-wider"
+    },
+    "imports": [
+      "@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@400;600;700;800&display=swap');"
+    ]
+  },
+  "colors": {
+    "theme": "light",
+    "palette": {
+      "primary": "#0F172A",
+      "primary_foreground": "#FFFFFF",
+      "secondary": "#F8FAFC",
+      "secondary_foreground": "#0F172A",
+      "accent": "#2563EB",
+      "accent_foreground": "#FFFFFF",
+      "muted": "#F1F5F9",
+      "muted_foreground": "#64748B",
+      "border": "#E2E8F0",
+      "input": "#E2E8F0",
+      "ring": "#0F172A",
+      "background": "#FFFFFF",
+      "foreground": "#0F172A",
+      "success": "#10B981",
+      "warning": "#F59E0B",
+      "destructive": "#EF4444"
+    },
+    "usage_rules": {
+      "gradients": "FORBIDDEN. Use flat, solid colors only.",
+      "text_contrast": "Body text must be slate-600 or darker. Headings must be slate-900.",
+      "interactive": "Buttons must have a hover state that is 10% lighter/darker, not just opacity change."
+    }
+  },
+  "visual_enhancers": {
+    "radius": {
+      "default": "rounded-md",
+      "card": "rounded-lg",
+      "button": "rounded-md"
+    },
+    "shadows": {
+      "card": "shadow-[0_2px_8px_rgba(0,0,0,0.04)]",
+      "dropdown": "shadow-xl border border-slate-100",
+      "hover": "shadow-[0_8px_16px_rgba(0,0,0,0.06)]"
+    },
+    "borders": {
+      "subtle": "border border-slate-200",
+      "focus": "ring-2 ring-slate-900 ring-offset-2"
+    }
+  },
+  "layout_strategies": {
+    "survey_page": {
+      "type": "centered_card",
+      "structure": "Background Image (Architectural) -> Overlay (White/90) -> Centered Card (max-w-2xl)",
+      "padding": "p-8 md:p-12",
+      "animation": "Fade in up for the card. Staggered reveal for form fields."
+    },
+    "admin_dashboard": {
+      "type": "sidebar_layout",
+      "structure": "Fixed Left Sidebar (Dark: Slate-900) -> Main Content Area (Light: Slate-50).",
+      "grid": "grid-cols-1 md:grid-cols-12 gap-6"
+    }
+  },
+  "components": {
+    "buttons": {
+      "primary": "bg-slate-900 text-white hover:bg-slate-800 h-11 px-8 font-medium transition-all active:scale-95",
+      "secondary": "bg-white border border-slate-200 text-slate-900 hover:bg-slate-50 h-11 px-8 font-medium",
+      "ghost": "hover:bg-slate-100 text-slate-600 hover:text-slate-900"
+    },
+    "inputs": {
+      "default": "h-11 bg-white border-slate-200 focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition-colors",
+      "label": "text-sm font-semibold text-slate-700 mb-2 block"
+    },
+    "cards": {
+      "wrapper": "bg-white border border-slate-100 shadow-sm p-6 md:p-8 rounded-xl",
+      "header": "mb-6 pb-4 border-b border-slate-100"
+    },
+    "data_table": {
+      "header": "bg-slate-50 text-slate-500 text-xs uppercase font-bold tracking-wider py-3 px-4",
+      "row": "border-b border-slate-100 hover:bg-slate-50/50 transition-colors",
+      "cell": "py-3 px-4 text-sm text-slate-700"
+    },
+    "cascading_dropdowns": {
+      "instruction": "Do not just stack them. Use a horizontal grid on desktop (grid-cols-3) if space permits, or a clean vertical stack with a 'connecting line' visual guide on the left to show flow.",
+      "empty_state": "When a dropdown is disabled, give it a bg-slate-50 and text-slate-400 style to indicate 'waiting'."
+    }
+  },
+  "image_assets": {
+    "backgrounds": {
+      "login_hero": "https://images.unsplash.com/photo-1754479145644-04ff3b295a02?q=85&w=1920&auto=format&fit=crop",
+      "survey_bg": "https://images.unsplash.com/photo-1771293806966-c22ba7f765e2?q=85&w=1920&auto=format&fit=crop",
+      "fallback": "https://images.unsplash.com/photo-1768382880068-37533aea4286?q=85&w=1920&auto=format&fit=crop"
+    },
+    "logos": {
+      "placeholder_company": "Use text 'ITC SURVEY' in Manrope Extrabold if logo is missing."
+    }
+  },
+  "motion": {
+    "preset": "framer-motion",
+    "transitions": {
+      "default": "transition={{ duration: 0.3, ease: 'easeInOut' }}",
+      "stagger": "variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0 } }}"
+    },
+    "rules": "No motion for motion's sake. Only animate: 1. Entrance of the page. 2. Dropdown opening. 3. Success state checkmark."
+  },
+  "accessibility": {
+    "contrast": "Strict WCAG AA compliance.",
+    "interactive": "All interactive elements must have a visible focus ring (ring-2 ring-slate-900 ring-offset-2).",
+    "testing": "All inputs and buttons must have data-testid attributes (e.g., data-testid='submit-survey-btn')."
+  },
+  "tech_stack_rules": {
+    "framework": "React JS (Use .js/.jsx extensions)",
+    "styling": "Tailwind CSS + Shadcn UI (Radix Primitives)",
+    "icons": "Lucide React",
+    "charts": "Recharts (via Shadcn Charts)",
+    "state": "React Hook Form + Zod for validation"
+  },
+  "instructions_to_main_agent": [
+    "1. SETUP: Ensure Manrope and Inter fonts are imported in index.css.",
+    "2. THEME: Use the 'Swiss Corporate' style defined above. Strict whitespace, sharp typography.",
+    "3. CASCADING LOGIC: The dropdowns (Branch -> Section -> Customer) are the core UX. Make them feel instant. Show a loading spinner inside the Select trigger when fetching data.",
+    "4. ADMIN: The dashboard must be dense but legible. Use the full width. The 'Relationship Issue' conditional input in the survey must appear smoothly with an animation.",
+    "5. FILE EXTENSIONS: Use .js and .jsx. Do NOT use .ts or .tsx.",
+    "6. TESTING: Add data-testid to every single interactive element.",
+    "7. IMAGE: Use the 'login_hero' URL for the Admin Login page background (with a dark overlay)."
+  ]
+}
