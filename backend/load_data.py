@@ -28,8 +28,8 @@ async def load_excel_data():
     
     data_list = []
     
-    # Skip header row and read data
-    for row in ws.iter_rows(min_row=2, values_only=True):
+    # Skip first 4 rows (empty rows and header) and read data from row 5
+    for row in ws.iter_rows(min_row=5, values_only=True):
         if row[0] and row[1] and row[2] and row[3]:  # Ensure all required fields exist
             data_list.append({
                 "branch": str(row[0]).strip(),
