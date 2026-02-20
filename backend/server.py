@@ -374,6 +374,8 @@ async def update_question(question_id: str, question_update: QuestionUpdate):
             raise HTTPException(status_code=404, detail="Question not found")
         
         return {"success": True, "message": "Question updated"}
+    except HTTPException:
+        raise
     except Exception as e:
         logging.error(f"Error updating question: {e}")
         raise HTTPException(status_code=500, detail=str(e))
