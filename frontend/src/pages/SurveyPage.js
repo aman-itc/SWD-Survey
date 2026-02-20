@@ -153,11 +153,15 @@ export default function SurveyPage() {
   };
 
   const handleCheckboxChange = (field, value) => {
-    const current = formData[field];
+    const current = questionAnswers[field] || [];
     const updated = current.includes(value)
       ? current.filter(item => item !== value)
       : [...current, value];
-    setFormData({ ...formData, [field]: updated });
+    setQuestionAnswers({ ...questionAnswers, [field]: updated });
+  };
+
+  const handleQuestionChange = (questionId, value) => {
+    setQuestionAnswers({ ...questionAnswers, [questionId]: value });
   };
 
   const handleSubmit = async (e) => {
