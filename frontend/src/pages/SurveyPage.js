@@ -25,25 +25,19 @@ export default function SurveyPage() {
   const [success, setSuccess] = useState(false);
   const [step, setStep] = useState(1);
   const [completionStats, setCompletionStats] = useState(null);
+  const [questions, setQuestions] = useState([]);
+  const [questionAnswers, setQuestionAnswers] = useState({});
 
   const [formData, setFormData] = useState({
     branch: "",
     section: "",
     wd_destination: "",
     dms_id_name: "",
-    q1_itc_biscuits_sales: "",
-    q2_total_biscuits_sales: "",
-    q3_itc_nd_sales: "",
-    q4_nd_sales_swd: "",
-    q5_loyalty_programs: [],
-    q5_loyalty_other: "",
-    q6_category_handlers: [],
-    q7_not_purchasing_reasons: [],
-    q7_relationship_issue_details: ""
   });
 
   useEffect(() => {
     fetchBranches();
+    fetchQuestions();
   }, []);
 
   const fetchBranches = async () => {
