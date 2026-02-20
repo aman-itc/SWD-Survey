@@ -20,16 +20,17 @@ export default function SurveyPage() {
   const [loading, setLoading] = useState(false);
   const [branches, setBranches] = useState([]);
   const [sections, setSections] = useState([]);
-  const [customers, setCustomers] = useState([]);
+  const [wdDestinations, setWdDestinations] = useState([]);
+  const [dmsIds, setDmsIds] = useState([]);
   const [success, setSuccess] = useState(false);
   const [step, setStep] = useState(1);
   const [completionStats, setCompletionStats] = useState(null);
 
   const [formData, setFormData] = useState({
     branch: "",
-    section_code: "",
-    dms_customer_id: "",
-    dms_customer_name: "",
+    section: "",
+    wd_destination: "",
+    dms_id_name: "",
     q1_itc_biscuits_sales: "",
     q2_total_biscuits_sales: "",
     q3_itc_nd_sales: "",
