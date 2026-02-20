@@ -225,7 +225,7 @@ async def get_responses(
         if branch:
             query["branch"] = branch
         if section:
-            query["section_code"] = section
+            query["section"] = section
         if start_date or end_date:
             query["submitted_at"] = {}
             if start_date:
