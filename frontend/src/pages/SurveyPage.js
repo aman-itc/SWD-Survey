@@ -297,7 +297,7 @@ export default function SurveyPage() {
                     <Label className="text-base font-semibold text-slate-800">Select Section *</Label>
                   </div>
                   <Select 
-                    value={formData.section_code} 
+                    value={formData.section} 
                     onValueChange={handleSectionChange}
                     disabled={!formData.branch}
                   >
@@ -312,37 +312,58 @@ export default function SurveyPage() {
                   </Select>
                 </div>
 
-                {/* Customer */}
+                {/* WD Destination */}
                 <div className="space-y-3 p-6 bg-slate-50 rounded-xl border border-slate-200">
                   <div className="flex items-center gap-3 mb-2">
                     <User className="w-5 h-5 text-blue-600" />
-                    <Label className="text-base font-semibold text-slate-800">Select Customer *</Label>
+                    <Label className="text-base font-semibold text-slate-800">Please select your WD and DS *</Label>
                   </div>
                   <Select 
-                    value={formData.dms_customer_id} 
-                    onValueChange={handleCustomerChange}
-                    disabled={!formData.section_code}
+                    value={formData.wd_destination} 
+                    onValueChange={handleWdDestinationChange}
+                    disabled={!formData.section}
                   >
-                    <SelectTrigger data-testid="customer-select" className="h-12 bg-white text-base disabled:bg-slate-100">
-                      <SelectValue placeholder={formData.section_code ? "Choose customer..." : "Select section first"} />
+                    <SelectTrigger data-testid="wd-destination-select" className="h-12 bg-white text-base disabled:bg-slate-100">
+                      <SelectValue placeholder={formData.section ? "Choose WD destination..." : "Select section first"} />
                     </SelectTrigger>
                     <SelectContent>
-                      {customers.map(customer => (
-                        <SelectItem key={customer.dms_customer_id} value={customer.dms_customer_id} className="text-sm py-3">
-                          <div className="flex flex-col">
-                            <span className="font-medium text-slate-900">{customer.dms_customer_id}</span>
-                            <span className="text-slate-600 text-xs mt-1">{customer.dms_customer_name}</span>
-                          </div>
+                      {wdDestinations.map(wd => (
+                        <SelectItem key={wd} value={wd} className="text-sm py-3">
+                          {wd}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                 </div>
 
-                {formData.dms_customer_name && (
+                {/* DMS ID - Name */}
+                <div className="space-y-3 p-6 bg-slate-50 rounded-xl border border-slate-200">
+                  <div className="flex items-center gap-3 mb-2">
+                    <User className="w-5 h-5 text-blue-600" />
+                    <Label className="text-base font-semibold text-slate-800">DMS ID - Name *</Label>
+                  </div>
+                  <Select 
+                    value={formData.dms_id_name} 
+                    onValueChange={handleDmsIdChange}
+                    disabled={!formData.wd_destination}
+                  >
+                    <SelectTrigger data-testid="dms-id-select" className="h-12 bg-white text-base disabled:bg-slate-100">
+                      <SelectValue placeholder={formData.wd_destination ? "Choose DMS ID..." : "Select WD destination first"} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {dmsIds.map(dms => (
+                        <SelectItem key={dms.dms_id_name} value={dms.dms_id_name} className="text-sm py-3">
+                          {dms.dms_id_name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {formData.dms_id_name && (
                   <div className="p-6 bg-green-50 rounded-xl border-2 border-green-200 animate-in fade-in slide-in-from-top-2">
-                    <Label className="text-sm font-semibold text-green-800 mb-2 block">Selected Customer</Label>
-                    <p className="text-lg font-medium text-green-900" data-testid="customer-name">{formData.dms_customer_name}</p>
+                    <Label className="text-sm font-semibold text-green-800 mb-2 block">Selected DMS</Label>
+                    <p className="text-lg font-medium text-green-900" data-testid="selected-dms">{formData.dms_id_name}</p>
                   </div>
                 )}
 
@@ -375,7 +396,7 @@ export default function SurveyPage() {
               <div className="flex justify-end mt-8">
                 <Button
                   onClick={handleNextStep}
-                  disabled={!formData.branch || !formData.section_code || !formData.dms_customer_id}
+                  disabled={!formData.branch || !formData.section || !formData.wd_destination || !formData.dms_id_name}
                   className="bg-blue-600 text-white hover:bg-blue-700 h-12 px-8 font-medium text-base"
                   data-testid="next-step-button"
                 >
