@@ -281,7 +281,7 @@ async def export_responses(
         if branch:
             query["branch"] = branch
         if section:
-            query["section_code"] = section
+            query["section"] = section
         
         responses = await db.survey_responses.find(query, {"_id": 0}).to_list(10000)
         
