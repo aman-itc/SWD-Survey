@@ -287,18 +287,18 @@ async def export_responses(
         
         responses = await db.survey_responses.find(query, {"_id": 0}).to_list(10000)
         
+        # Get all questions to build dynamic headers
+        questions = await db.survey_questions.find({}, {"_id": 0}).sort("question_number", 1).to_list(100)
+        
         # Create Excel file in memory
         output = io.BytesIO()
         workbook = xlsxwriter.Workbook(output)
         worksheet = workbook.add_worksheet("Survey Responses")
         
-        # Headers
-        headers = [
-            "ID", "Branch", "Section", "WD Destination", "DMS ID - Name",
-            "Q1: ITC Biscuits Sales", "Q2: Total Biscuits Sales", "Q3: ITC ND Sales",
-            "Q4: ND Sales SWD", "Q5: Loyalty Programs", "Q6: Category Handlers",
-            "Q7: Not Purchasing Reasons", "Q7: Relationship Issue Details", "Submitted At"
-        ]
+        # Build headers dynamically
+        base_headers = ["ID", "Branch", "Section", "WD Destination", "DMS ID - Name"]
+        question_headers = [f"Q{q['question_number']}: {q['question_text'][:50]}" for q in questions]
+        headers = base_headers + question_headers + ["Submitted At"]
         
         for col, header in enumerate(headers):
             worksheet.write(0, col, header)
@@ -310,15 +310,18 @@ async def export_responses(
             worksheet.write(row, 2, response.get("section", ""))
             worksheet.write(row, 3, response.get("wd_destination", ""))
             worksheet.write(row, 4, response.get("dms_id_name", ""))
-            worksheet.write(row, 5, response.get("q1_itc_biscuits_sales", ""))
-            worksheet.write(row, 6, response.get("q2_total_biscuits_sales", ""))
-            worksheet.write(row, 7, response.get("q3_itc_nd_sales", ""))
-            worksheet.write(row, 8, response.get("q4_nd_sales_swd", ""))
-            worksheet.write(row, 9, ", ".join(response.get("q5_loyalty_programs", [])))
-            worksheet.write(row, 10, ", ".join(response.get("q6_category_handlers", [])))
-            worksheet.write(row, 11, ", ".join(response.get("q7_not_purchasing_reasons", [])))
-            worksheet.write(row, 12, response.get("q7_relationship_issue_details", ""))
-            worksheet.write(row, 13, response.get("submitted_at", ""))
+            
+            # Write dynamic question responses
+            responses_data = response.get("responses", {})
+            for col_offset, q in enumerate(questions):
+                q_key = f"q{q['question_number']}"
+                answer = responses_data.get(q_key, "")
+                # Handle list answers
+                if isinstance(answer, list):
+                    answer = ", ".join(answer)
+                worksheet.write(row, 5 + col_offset, str(answer) if answer else "")
+            
+            worksheet.write(row, 5 + len(questions), response.get("submitted_at", ""))
         
         workbook.close()
         output.seek(0)
