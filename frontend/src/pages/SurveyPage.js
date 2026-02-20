@@ -178,9 +178,9 @@ export default function SurveyPage() {
 
       const submission = {
         branch: formData.branch,
-        section_code: formData.section_code,
-        dms_customer_id: formData.dms_customer_id,
-        dms_customer_name: formData.dms_customer_name,
+        section: formData.section,
+        wd_destination: formData.wd_destination,
+        dms_id_name: formData.dms_id_name,
         q1_itc_biscuits_sales: formData.q1_itc_biscuits_sales,
         q2_total_biscuits_sales: formData.q2_total_biscuits_sales,
         q3_itc_nd_sales: formData.q3_itc_nd_sales,
