@@ -132,23 +132,33 @@ async def get_branches():
 @api_router.get("/sections/{branch}")
 async def get_sections(branch: str):
     try:
-        sections = await db.survey_data.distinct("section_code", {"branch": branch})
+        sections = await db.survey_data.distinct("section", {"branch": branch})
         return {"sections": sorted(sections)}
     except Exception as e:
         logging.error(f"Error fetching sections: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-# Get customers by section
-@api_router.get("/customers/{section_code}")
-async def get_customers(section_code: str):
+# Get WD destinations by section
+@api_router.get("/wd-destinations/{section}")
+async def get_wd_destinations(section: str):
     try:
-        customers = await db.survey_data.find(
-            {"section_code": section_code},
-            {"_id": 0, "dms_customer_id": 1, "dms_customer_name": 1}
-        ).to_list(1000)
-        return {"customers": customers}
+        wd_destinations = await db.survey_data.distinct("wd_destination", {"section": section})
+        return {"wd_destinations": sorted(wd_destinations)}
     except Exception as e:
-        logging.error(f"Error fetching customers: {e}")
+        logging.error(f"Error fetching WD destinations: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+# Get DMS IDs by WD destination
+@api_router.get("/dms-ids/{section}/{wd_destination}")
+async def get_dms_ids(section: str, wd_destination: str):
+    try:
+        dms_ids = await db.survey_data.find(
+            {"section": section, "wd_destination": wd_destination},
+            {"_id": 0, "dms_id_name": 1}
+        ).to_list(1000)
+        return {"dms_ids": dms_ids}
+    except Exception as e:
+        logging.error(f"Error fetching DMS IDs: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 # Get section completion stats
