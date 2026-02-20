@@ -34,6 +34,17 @@ export default function SurveyPage() {
     wd_destination: "",
     dms_id_name: "",
   });
+  
+  // Color schemes for dynamic questions
+  const questionColors = [
+    { bg: "from-blue-50 to-slate-50", border: "border-blue-100", hover: "hover:bg-blue-50", accent: "text-blue-600", checkBorder: "border-blue-300" },
+    { bg: "from-purple-50 to-slate-50", border: "border-purple-100", hover: "hover:bg-purple-50", accent: "text-purple-600", checkBorder: "border-purple-300" },
+    { bg: "from-green-50 to-slate-50", border: "border-green-100", hover: "hover:bg-green-50", accent: "text-green-600", checkBorder: "border-green-300" },
+    { bg: "from-amber-50 to-slate-50", border: "border-amber-100", hover: "hover:bg-amber-50", accent: "text-amber-600", checkBorder: "border-amber-300" },
+    { bg: "from-rose-50 to-slate-50", border: "border-rose-100", hover: "hover:bg-rose-50", accent: "text-rose-600", checkBorder: "border-rose-300" },
+    { bg: "from-cyan-50 to-slate-50", border: "border-cyan-100", hover: "hover:bg-cyan-50", accent: "text-cyan-600", checkBorder: "border-cyan-300" },
+    { bg: "from-indigo-50 to-slate-50", border: "border-indigo-100", hover: "hover:bg-indigo-50", accent: "text-indigo-600", checkBorder: "border-indigo-300" },
+  ];
 
   useEffect(() => {
     fetchBranches();
