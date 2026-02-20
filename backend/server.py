@@ -37,14 +37,7 @@ class SurveyResponse(BaseModel):
     section: str
     wd_destination: str
     dms_id_name: str
-    q1_itc_biscuits_sales: str
-    q2_total_biscuits_sales: str
-    q3_itc_nd_sales: str
-    q4_nd_sales_swd: str
-    q5_loyalty_programs: List[str]
-    q6_category_handlers: List[str]
-    q7_not_purchasing_reasons: List[str]
-    q7_relationship_issue_details: Optional[str] = None
+    responses: Dict[str, Any] = {}  # Dynamic question responses
     submitted_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class SurveySubmission(BaseModel):
@@ -52,14 +45,7 @@ class SurveySubmission(BaseModel):
     section: str
     wd_destination: str
     dms_id_name: str
-    q1_itc_biscuits_sales: str
-    q2_total_biscuits_sales: str
-    q3_itc_nd_sales: str
-    q4_nd_sales_swd: str
-    q5_loyalty_programs: List[str]
-    q6_category_handlers: List[str]
-    q7_not_purchasing_reasons: List[str]
-    q7_relationship_issue_details: Optional[str] = None
+    model_config = ConfigDict(extra='allow')  # Allow dynamic question fields
 
 class AdminLogin(BaseModel):
     email: EmailStr
