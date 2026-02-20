@@ -95,25 +95,31 @@ export default function SurveyPage() {
   };
 
   const handleBranchChange = (value) => {
-    setFormData({ ...formData, branch: value, section_code: "", dms_customer_id: "", dms_customer_name: "" });
+    setFormData({ ...formData, branch: value, section: "", wd_destination: "", dms_id_name: "" });
     setSections([]);
-    setCustomers([]);
+    setWdDestinations([]);
+    setDmsIds([]);
     fetchSections(value);
   };
 
   const handleSectionChange = (value) => {
-    setFormData({ ...formData, section_code: value, dms_customer_id: "", dms_customer_name: "" });
-    setCustomers([]);
+    setFormData({ ...formData, section: value, wd_destination: "", dms_id_name: "" });
+    setWdDestinations([]);
+    setDmsIds([]);
     setCompletionStats(null);
-    fetchCustomers(value);
+    fetchWdDestinations(value);
   };
 
-  const handleCustomerChange = (value) => {
-    const customer = customers.find(c => c.dms_customer_id === value);
+  const handleWdDestinationChange = (value) => {
+    setFormData({ ...formData, wd_destination: value, dms_id_name: "" });
+    setDmsIds([]);
+    fetchDmsIds(formData.section, value);
+  };
+
+  const handleDmsIdChange = (value) => {
     setFormData({
       ...formData,
-      dms_customer_id: value,
-      dms_customer_name: customer ? customer.dms_customer_name : ""
+      dms_id_name: value
     });
   };
 
