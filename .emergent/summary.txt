@@ -1,0 +1,171 @@
+<analysis>**original_problem_statement:** 
+The user wants to build a survey website.
+**Initial Requirements:**
+1.  A landing page where an Area Executive can select from cascading dropdowns: Branch -> Section -> DMS Customer ID. The DMS Customer Name should auto-populate.
+2.  The dropdown data is provided in an Excel file ().
+3.  After selection, the user is presented with a 7-question survey with single-select, multi-select, and conditional text input options.
+4.  All survey questions are mandatory.
+5.  A homepage with two tabs: Area Executive (leads to the survey) and Administrator.
+6.  The Administrator tab leads to a login page (credentials:  / ).
+7.  The Admin Panel should allow viewing survey results with charts, filtering, and an Export to Excel feature.
+8.  Survey submissions should be saved to a database.
+
+**Subsequent Feature Requests & Changes:**
+1.  **Two-Step Survey:** Separate the initial dropdown selections from the survey questions into a two-step process.
+2.  **UI/Layout:** Improve the cluttered question layout and make the overall design more lively.
+3.  **Completion Tracking:** On the first step of the survey, display the completion percentage for the selected Section.
+4.  **Dynamic Question Management:** Add a feature in the Admin Panel for admins to add, edit, and delete survey questions, including their options and mandatory status.
+5.  **Data Structure Overhaul:** The user provided a new Excel file () and requested a change in the cascading dropdown logic to: Branch -> Section -> WD Destination code x DS Name -> DMS ID - Name.
+6.  **Dynamic Survey Form:** The survey form must dynamically load questions from the database so that changes made in the Admin Panel are reflected.
+
+**User's preferred language**: English
+
+**what currently exists?**
+A full-stack survey application has been built using a FastAPI backend, a React frontend, and a MongoDB database.
+- **Backend:** Features API endpoints for the 4-level cascading dropdowns, survey submission, admin login, fetching/exporting survey responses, and full CRUD for survey questions.
+- **Frontend:** Implements a homepage to select user type (Admin/Executive), a two-step survey page for executives, and a multi-tab admin panel. The admin panel has views for survey responses (with filters and export) and for managing questions.
+- **Data:** The application has been migrated to use a new data structure from . Initial survey questions have been seeded into the database.
+
+**Last working item**: 
+    - Last item agent was working: The agent was refactoring the  component to load questions dynamically from the backend () instead of using a hardcoded list. This was a corrective action because a user-reported bug revealed that changes made in the Manage Questions part of the admin panel were not showing up in the actual survey. The new implementation introduced a runtime error.
+    - Status: IN PROGRESS
+    - Agent Testing Done: N
+    - Which testing method agent to use? both
+    - User Testing Done: N
+
+**All Pending/In progress Issue list**:
+  - Issue 1:  (P0) The survey page crashes when trying to display the questions.
+
+  Issues Detail:
+  - Issue 1: 
+     - **Description:** After the user completes Step 1 (selecting outlet details) and proceeds to Step 2, the application crashes with a  in . This is because the code attempts to render question options before they are available or for a question that lacks an 'options' property.
+     - **Attempted fixes:** The agent attempted a full rewrite of  to fetch and render questions dynamically. This rewrite introduced the bug.
+     - **Next debug checklist:**
+        1.  In , locate the line causing the error (around line 350, ).
+        2.  Add a defensive check to prevent the error, e.g., .
+        3.  Before the render/return statement, add  to inspect the structure of the question data being received from the backend.
+        4.  Use  to independently verify the output of the  endpoint to ensure all  and  questions have a valid  array.
+        5.  Ensure the  state is initialized to an empty array () to avoid errors on the initial render.
+     - **Why fix this issue and what will be achieved with the fix?** Fixing this will make the survey functional again and, more importantly, will complete the dynamic question feature, allowing any changes made by the admin to be reflected in the live survey.
+     - **Status:**  IN PROGRESS
+     - **Is recurring issue?** N
+     - **Should Test frontend/backend/both after fix?** both
+     - **Blocked on other issue:** None
+
+**In progress Task List**:
+  - Task 1:  Finalize dynamic question loading on the survey page.
+
+ Task Detail:
+  - Task 1: 
+     - **Where to resume:** Resume work in . After fixing the bug mentioned in the Issues Detail section, ensure that the dynamic rendering logic correctly handles all question types (, , and the conditional text input for Relationship issue). Also, ensure survey submissions correctly capture the answers to these dynamic questions.
+     - **What will be achieved with this?** The core feature of a fully admin-configurable survey will be complete.
+     - **Status:**  IN PROGRESS
+     - **Should Test frontend/backend/both after fix?** both
+     - **Blocked on something:** Blocked on Issue 1.
+
+**Upcoming and Future Tasks**
+There are no other explicit upcoming tasks requested by the user. The primary goal is to fix the current bug and finalize the dynamic question management feature.
+
+**Completed work in this session**
+- **Foundation:** Built a full-stack survey application from scratch.
+- **Data Loading:** Implemented scripts to parse Excel files (, then ) and load data into MongoDB.
+- **Cascading Dropdowns:** Created a 4-level cascading dropdown system (Branch -> Section -> WD/DS -> DMS) on the frontend with corresponding backend APIs.
+- **Admin Panel:**
+    - Implemented secure admin login.
+    - Created a dashboard to view and filter survey responses.
+    - Added a working Export to Excel feature.
+    - Built the backend CRUD APIs and frontend UI for managing survey questions.
+- **Survey Flow:**
+    - Designed a two-step process for a better user experience.
+    - Implemented a completion percentage tracker for each section.
+- **UI/UX:** Enhanced the UI from a blunt design to a more lively one with better graphics and layout.
+- **Data Migration:** Successfully refactored the entire application (backend models, APIs, frontend components) to support a new, more complex data structure.
+- **Question Seeding:** Created and executed a script to seed the initial hardcoded questions into the database to make them editable.
+
+**Earlier issues found/mentioned but not fixed**
+None. The only outstanding issue is the one currently being worked on.
+
+**Known issue recurrence from previous fork**
+N/A
+
+**Code Architecture**
+
+
+**Key Technical Concepts**
+- **Backend:** FastAPI, Pydantic, MongoDB (with ), Pandas (for Excel parsing).
+- **Frontend:** React, React Hooks (, ),  for API calls,  for navigation.
+- **UI:** Shadcn/UI component library, Tailwind CSS.
+
+**key DB schema**
+  - **outlet_data**: 
+  - **survey_responses**: 
+  - **questions**: 
+
+**changes in tech stack**
+None.
+
+**All files of reference**
+- : Contains all backend logic. Has been significantly updated to support the new data structure and question management.
+- : The main survey page for area executives. **This file is currently broken and is the focus of the immediate work.**
+- : The main page for administrators, which includes tabs for viewing responses and managing questions.
+- : The component that allows admins to perform CRUD operations on questions.
+- : The script used to populate the  collection from .
+
+**Areas that need refactoring**:
+The  component has become very large and complex due to handling the two-step process, four-level cascading dropdowns, completion percentage, and dynamic question rendering. Once the current bug is fixed, it could be beneficial to break it down into smaller, more manageable sub-components (e.g., , ).
+
+**key api endpoints**
+- : Gets all unique branches.
+- : Gets sections for a branch.
+- : Gets WDs for a section.
+- : Gets DMS customers for a WD.
+- : Gets survey completion % for a section.
+- : (POST) Submits a survey.
+- : (GET, POST) For survey questions.
+- : (PUT, DELETE) For a specific survey question.
+- : (POST) For admin authentication.
+- : (GET) Gets all survey responses, with filtering.
+- : (GET) Exports survey responses to an Excel file.
+
+**Critical Info for New Agent**
+- The most critical task is to fix the runtime error in  and complete the dynamic question rendering feature.
+- The application's data source was changed mid-project. All logic now relies on the structure from  and the  collection.
+- The admin credentials are hardcoded for now: email , password .
+- The survey questions are no longer hardcoded in the frontend. They must be fetched from  and rendered dynamically.
+
+**documents and test reports created in this job**
+None.
+
+**Last 10 User Messages and any pending HUMAN messages**
+1.  **User:** Survey isn't running after I made updates to the questions. It is showing uncaught runtime errors. (PENDING)
+2.  **Agent:** Starts debugging by checking the frontend logs.
+3.  **User:** When I update a question in admin panel why is it not changing in the survey questions?
+4.  **Agent:** Acknowledges the issue (survey questions were hardcoded) and begins rewriting  to be dynamic.
+5.  **User:** You've done a good job! Let's change the database to this... (Provides new Excel file and new 4-level dropdown logic).
+6.  **Agent:** Implements the major data structure change across the entire application.
+7.  **User:** In the manage questions it is not showing questions which are already there... The admin should also have the capability to edit existing questions.
+8.  **Agent:** Realizes the original questions were hardcoded, creates a seed script to add them to the database, and confirms they appear in the admin panel.
+9.  **User:** In the admin panel, I also want you to add a tab to change the questions... Also at the home page it looks slightly bland improve its graphics...
+10. **Agent:** Implements the question management backend and admin UI, and improves the homepage design.
+
+**Project Health Check:**
+- **Broken:** The frontend survey form () is currently non-functional due to a JavaScript runtime error.
+- **Mocked:** N/A.
+
+**3rd Party Integrations**
+None.
+
+**Testing status**
+  - Testing agent used after significant changes: NO
+  - Troubleshoot agent used after agent stuck in loop: NO
+  - Test files created: []
+  - Known regressions: The entire survey-taking functionality is currently broken due to the bug introduced in the last step.
+
+**Credentials to test flow:**
+-   **User Role:** Area Executive (no login required)
+-   **Admin Role:**
+    -   Email: 
+    -   Password: 
+
+**What agent forgot to execute**
+The agent initially forgot to make the survey form dynamic after creating the question management system. It started fixing this but introduced a blocking bug. The fix for this oversight is the current work-in-progress.</analysis>
