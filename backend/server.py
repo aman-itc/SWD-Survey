@@ -292,7 +292,7 @@ async def export_responses(
         
         # Headers
         headers = [
-            "ID", "Branch", "Section Code", "DMS Customer ID", "DMS Customer Name",
+            "ID", "Branch", "Section", "WD Destination", "DMS ID - Name",
             "Q1: ITC Biscuits Sales", "Q2: Total Biscuits Sales", "Q3: ITC ND Sales",
             "Q4: ND Sales SWD", "Q5: Loyalty Programs", "Q6: Category Handlers",
             "Q7: Not Purchasing Reasons", "Q7: Relationship Issue Details", "Submitted At"
@@ -305,9 +305,9 @@ async def export_responses(
         for row, response in enumerate(responses, start=1):
             worksheet.write(row, 0, response.get("id", ""))
             worksheet.write(row, 1, response.get("branch", ""))
-            worksheet.write(row, 2, response.get("section_code", ""))
-            worksheet.write(row, 3, response.get("dms_customer_id", ""))
-            worksheet.write(row, 4, response.get("dms_customer_name", ""))
+            worksheet.write(row, 2, response.get("section", ""))
+            worksheet.write(row, 3, response.get("wd_destination", ""))
+            worksheet.write(row, 4, response.get("dms_id_name", ""))
             worksheet.write(row, 5, response.get("q1_itc_biscuits_sales", ""))
             worksheet.write(row, 6, response.get("q2_total_biscuits_sales", ""))
             worksheet.write(row, 7, response.get("q3_itc_nd_sales", ""))
