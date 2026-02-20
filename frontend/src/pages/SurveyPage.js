@@ -462,165 +462,111 @@ export default function SurveyPage() {
               </div>
 
               <div className="space-y-8">
-                {/* Q1 */}
-                <div className="p-6 bg-gradient-to-br from-blue-50 to-slate-50 rounded-xl border border-blue-100">
-                  <Label className="text-base font-semibold text-slate-900 mb-4 block">
-                    1. How much is ITC biscuits monthly Sales (including all sources of purchase)? *
-                  </Label>
-                  <RadioGroup value={formData.q1_itc_biscuits_sales} onValueChange={(value) => setFormData({...formData, q1_itc_biscuits_sales: value})} className="space-y-3">
-                    {["<Rs 1k", "Rs 1k-5k", "Rs.5k-20k", "Rs.20k-1L", "Rs.1L +"].map(option => (
-                      <div key={option} className="flex items-center space-x-3 p-3 bg-white rounded-lg hover:bg-blue-50 transition-colors">
-                        <RadioGroupItem value={option} id={`q1-${option}`} data-testid={`q1-${option}`} className="text-blue-600" />
-                        <Label htmlFor={`q1-${option}`} className="cursor-pointer font-normal text-base flex-1">{option}</Label>
-                      </div>
-                    ))}
-                  </RadioGroup>
-                </div>
-
-                {/* Q2 */}
-                <div className="p-6 bg-gradient-to-br from-purple-50 to-slate-50 rounded-xl border border-purple-100">
-                  <Label className="text-base font-semibold text-slate-900 mb-4 block">
-                    2. How much is the total monthly biscuits category sales for the outlet (All sources of purchase, all national/regional players)? *
-                  </Label>
-                  <RadioGroup value={formData.q2_total_biscuits_sales} onValueChange={(value) => setFormData({...formData, q2_total_biscuits_sales: value})} className="space-y-3">
-                    {["<Rs.20K", "Rs.20k - 1L", "Rs.1L – 5L", "Rs.5L +"].map(option => (
-                      <div key={option} className="flex items-center space-x-3 p-3 bg-white rounded-lg hover:bg-purple-50 transition-colors">
-                        <RadioGroupItem value={option} id={`q2-${option}`} data-testid={`q2-${option}`} className="text-purple-600" />
-                        <Label htmlFor={`q2-${option}`} className="cursor-pointer font-normal text-base flex-1">{option}</Label>
-                      </div>
-                    ))}
-                  </RadioGroup>
-                </div>
-
-                {/* Q3 */}
-                <div className="p-6 bg-gradient-to-br from-green-50 to-slate-50 rounded-xl border border-green-100">
-                  <Label className="text-base font-semibold text-slate-900 mb-4 block">
-                    3. How much is ITC ND monthly Sales (including all sources of purchase)? *
-                  </Label>
-                  <RadioGroup value={formData.q3_itc_nd_sales} onValueChange={(value) => setFormData({...formData, q3_itc_nd_sales: value})} className="space-y-3">
-                    {["<Rs.5k", "Rs.5k-20k", "Rs.20k-1L", "Rs.1L +"].map(option => (
-                      <div key={option} className="flex items-center space-x-3 p-3 bg-white rounded-lg hover:bg-green-50 transition-colors">
-                        <RadioGroupItem value={option} id={`q3-${option}`} data-testid={`q3-${option}`} className="text-green-600" />
-                        <Label htmlFor={`q3-${option}`} className="cursor-pointer font-normal text-base flex-1">{option}</Label>
-                      </div>
-                    ))}
-                  </RadioGroup>
-                </div>
-
-                {/* Q4 */}
-                <div className="p-6 bg-gradient-to-br from-amber-50 to-slate-50 rounded-xl border border-amber-100">
-                  <Label className="text-base font-semibold text-slate-900 mb-4 block">
-                    4. How much is ND sales for the SWD (All sources, all national/regional players)? *
-                  </Label>
-                  <RadioGroup value={formData.q4_nd_sales_swd} onValueChange={(value) => setFormData({...formData, q4_nd_sales_swd: value})} className="space-y-3">
-                    {["<Rs.20K", "Rs.20k - 1L", "Rs.1L – 5L", "Rs.5L +"].map(option => (
-                      <div key={option} className="flex items-center space-x-3 p-3 bg-white rounded-lg hover:bg-amber-50 transition-colors">
-                        <RadioGroupItem value={option} id={`q4-${option}`} data-testid={`q4-${option}`} className="text-amber-600" />
-                        <Label htmlFor={`q4-${option}`} className="cursor-pointer font-normal text-base flex-1">{option}</Label>
-                      </div>
-                    ))}
-                  </RadioGroup>
-                </div>
-
-                {/* Q5 */}
-                <div className="p-6 bg-gradient-to-br from-rose-50 to-slate-50 rounded-xl border border-rose-100">
-                  <Label className="text-base font-semibold text-slate-900 mb-4 block">
-                    5. Is the SWD part of any competition loyalty program? (Select all that apply) *
-                  </Label>
-                  <div className="space-y-3">
-                    {["Britannia", "Nestle", "HUL", "Others"].map(option => (
-                      <div key={option} className="flex items-center space-x-3 p-3 bg-white rounded-lg hover:bg-rose-50 transition-colors">
-                        <Checkbox 
-                          id={`q5-${option}`}
-                          checked={formData.q5_loyalty_programs.includes(option)}
-                          onCheckedChange={() => handleCheckboxChange("q5_loyalty_programs", option)}
-                          data-testid={`q5-${option}`}
-                          className="border-rose-300"
-                        />
-                        <Label htmlFor={`q5-${option}`} className="cursor-pointer font-normal text-base flex-1">{option}</Label>
-                      </div>
-                    ))}
-                    {formData.q5_loyalty_programs.includes("Others") && (
-                      <Input
-                        placeholder="Please specify other loyalty program"
-                        value={formData.q5_loyalty_other}
-                        onChange={(e) => setFormData({...formData, q5_loyalty_other: e.target.value})}
-                        className="mt-3 h-11"
-                        data-testid="q5-others-input"
-                      />
-                    )}
+                {questions.length === 0 ? (
+                  <div className="text-center py-12">
+                    <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-blue-600" />
+                    <p className="text-slate-600">Loading questions...</p>
                   </div>
-                </div>
-
-                {/* Q6 */}
-                <div className="p-6 bg-gradient-to-br from-cyan-50 to-slate-50 rounded-xl border border-cyan-100">
-                  <Label className="text-base font-semibold text-slate-900 mb-4 block">
-                    6. Is the outlet a category handler for the following? (Select all that apply) *
-                  </Label>
-                  <div className="grid md:grid-cols-2 gap-3">
-                    {["Atta", "Snacks", "Confectionery", "Soaps", "Agarbatti", "Cigarettes"].map(option => (
-                      <div key={option} className="flex items-center space-x-3 p-3 bg-white rounded-lg hover:bg-cyan-50 transition-colors">
-                        <Checkbox 
-                          id={`q6-${option}`}
-                          checked={formData.q6_category_handlers.includes(option)}
-                          onCheckedChange={() => handleCheckboxChange("q6_category_handlers", option)}
-                          data-testid={`q6-${option}`}
-                          className="border-cyan-300"
-                        />
-                        <Label htmlFor={`q6-${option}`} className="cursor-pointer font-normal text-base flex-1">{option}</Label>
+                ) : (
+                  questions.map((question, index) => {
+                    const colors = questionColors[index % questionColors.length];
+                    const answer = questionAnswers[question.id];
+                    
+                    return (
+                      <div 
+                        key={question.id} 
+                        className={`p-6 bg-gradient-to-br ${colors.bg} rounded-xl border ${colors.border}`}
+                        data-testid={`question-${question.question_number}`}
+                      >
+                        <Label className="text-base font-semibold text-slate-900 mb-4 block">
+                          {question.question_number}. {question.question_text} {question.is_mandatory && "*"}
+                        </Label>
+                        
+                        {question.question_type === "single" && question.options && (
+                          <RadioGroup 
+                            value={answer || ""} 
+                            onValueChange={(value) => handleQuestionChange(question.id, value)} 
+                            className="space-y-3"
+                          >
+                            {question.options.map(option => (
+                              <div key={option.value} className={`flex items-center space-x-3 p-3 bg-white rounded-lg ${colors.hover} transition-colors`}>
+                                <RadioGroupItem 
+                                  value={option.value} 
+                                  id={`q${question.question_number}-${option.value}`} 
+                                  data-testid={`q${question.question_number}-${option.value}`}
+                                  className={colors.accent}
+                                />
+                                <Label 
+                                  htmlFor={`q${question.question_number}-${option.value}`} 
+                                  className="cursor-pointer font-normal text-base flex-1"
+                                >
+                                  {option.label}
+                                </Label>
+                              </div>
+                            ))}
+                          </RadioGroup>
+                        )}
+                        
+                        {question.question_type === "multi" && question.options && (
+                          <div className="space-y-3">
+                            {question.options.map(option => (
+                              <div key={option.value} className={`flex items-center space-x-3 p-3 bg-white rounded-lg ${colors.hover} transition-colors`}>
+                                <Checkbox 
+                                  id={`q${question.question_number}-${option.value}`}
+                                  checked={Array.isArray(answer) && answer.includes(option.value)}
+                                  onCheckedChange={() => handleCheckboxChange(question.id, option.value)}
+                                  data-testid={`q${question.question_number}-${option.value}`}
+                                  className={colors.checkBorder}
+                                />
+                                <Label 
+                                  htmlFor={`q${question.question_number}-${option.value}`} 
+                                  className="cursor-pointer font-normal text-base flex-1"
+                                >
+                                  {option.label}
+                                </Label>
+                              </div>
+                            ))}
+                            
+                            {/* Conditional input for multi-select */}
+                            {question.has_conditional_input && question.conditional_trigger && 
+                              Array.isArray(answer) && answer.includes(question.conditional_trigger) && (
+                              <div className="mt-4 p-4 bg-white rounded-lg border-2 border-opacity-50 animate-in fade-in slide-in-from-top-2" style={{borderColor: 'inherit'}}>
+                                <Label className="text-sm font-semibold text-slate-800 mb-2 block">
+                                  Please provide details for "{question.conditional_trigger}" *
+                                </Label>
+                                <Textarea
+                                  placeholder={`Describe the ${question.conditional_trigger.toLowerCase()}...`}
+                                  value={questionAnswers[`${question.id}_conditional`] || ""}
+                                  onChange={(e) => handleQuestionChange(`${question.id}_conditional`, e.target.value)}
+                                  rows={4}
+                                  data-testid={`q${question.question_number}-conditional-input`}
+                                  className="border-slate-200"
+                                />
+                              </div>
+                            )}
+                          </div>
+                        )}
+                        
+                        {question.question_type === "text" && (
+                          <Textarea
+                            placeholder="Enter your response..."
+                            value={answer || ""}
+                            onChange={(e) => handleQuestionChange(question.id, e.target.value)}
+                            rows={4}
+                            data-testid={`q${question.question_number}-text-input`}
+                            className="border-slate-200"
+                          />
+                        )}
                       </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Q7 */}
-                <div className="p-6 bg-gradient-to-br from-indigo-50 to-slate-50 rounded-xl border border-indigo-100">
-                  <Label className="text-base font-semibold text-slate-900 mb-4 block">
-                    7. Why is the SWD not purchasing significant quantity from WD? (Select all that apply) *
-                  </Label>
-                  <div className="space-y-3">
-                    {[
-                      "Credit related",
-                      "High Purchase from Alternate Channel",
-                      "Loyalty of competition & not present in Shubh Labh",
-                      "Low demand/Sell out led",
-                      "Delivery Issues",
-                      "Relationship issue",
-                      "Retailer tagged as SWD",
-                      "Scheme communication not adequate"
-                    ].map(option => (
-                      <div key={option} className="flex items-center space-x-3 p-3 bg-white rounded-lg hover:bg-indigo-50 transition-colors">
-                        <Checkbox 
-                          id={`q7-${option}`}
-                          checked={formData.q7_not_purchasing_reasons.includes(option)}
-                          onCheckedChange={() => handleCheckboxChange("q7_not_purchasing_reasons", option)}
-                          data-testid={`q7-${option}`}
-                          className="border-indigo-300"
-                        />
-                        <Label htmlFor={`q7-${option}`} className="cursor-pointer font-normal text-base flex-1">{option}</Label>
-                      </div>
-                    ))}
-                    {formData.q7_not_purchasing_reasons.includes("Relationship issue") && (
-                      <div className="mt-4 p-4 bg-white rounded-lg border-2 border-indigo-200 animate-in fade-in slide-in-from-top-2">
-                        <Label className="text-sm font-semibold text-indigo-900 mb-2 block">Please provide reason for relationship issue *</Label>
-                        <Textarea
-                          placeholder="Describe the relationship issue..."
-                          value={formData.q7_relationship_issue_details}
-                          onChange={(e) => setFormData({...formData, q7_relationship_issue_details: e.target.value})}
-                          rows={4}
-                          data-testid="q7-relationship-details"
-                          className="border-indigo-200"
-                        />
-                      </div>
-                    )}
-                  </div>
-                </div>
+                    );
+                  })
+                )}
               </div>
 
               <div className="flex justify-end pt-6 border-t border-slate-200">
                 <Button
                   type="submit"
-                  disabled={loading}
+                  disabled={loading || questions.length === 0}
                   className="bg-blue-600 text-white hover:bg-blue-700 h-12 px-8 font-medium text-base shadow-lg hover:shadow-xl transition-all"
                   data-testid="submit-survey-button"
                 >
