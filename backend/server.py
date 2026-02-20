@@ -178,12 +178,28 @@ async def get_section_completion(section: str):
 @api_router.post("/survey/submit")
 async def submit_survey(submission: SurveySubmission):
     try:
-        response = SurveyResponse(**submission.model_dump())
-        doc = response.model_dump()
-        doc['submitted_at'] = doc['submitted_at'].isoformat()
+        # Extract base fields
+        doc = {
+            "id": str(uuid.uuid4()),
+            "branch": submission.branch,
+            "section": submission.section,
+            "wd_destination": submission.wd_destination,
+            "dms_id_name": submission.dms_id_name,
+            "submitted_at": datetime.now(timezone.utc).isoformat()
+        }
+        
+        # Get all extra fields (dynamic question responses)
+        extra_data = submission.model_dump(exclude={"branch", "section", "wd_destination", "dms_id_name"})
+        
+        # Store responses in a structured format
+        responses = {}
+        for key, value in extra_data.items():
+            responses[key] = value
+        
+        doc["responses"] = responses
         
         await db.survey_responses.insert_one(doc)
-        return {"success": True, "message": "Survey submitted successfully", "id": response.id}
+        return {"success": True, "message": "Survey submitted successfully", "id": doc["id"]}
     except Exception as e:
         logging.error(f"Error submitting survey: {e}")
         raise HTTPException(status_code=500, detail=str(e))
