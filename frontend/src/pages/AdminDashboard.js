@@ -307,8 +307,8 @@ export default function AdminDashboard() {
                 <TableRow className="bg-slate-50">
                   <TableHead className="font-bold">Branch</TableHead>
                   <TableHead className="font-bold">Section</TableHead>
-                  <TableHead className="font-bold">Customer ID</TableHead>
-                  <TableHead className="font-bold">Customer Name</TableHead>
+                  <TableHead className="font-bold">WD Destination</TableHead>
+                  <TableHead className="font-bold">DMS ID - Name</TableHead>
                   <TableHead className="font-bold">Q1</TableHead>
                   <TableHead className="font-bold">Q2</TableHead>
                   <TableHead className="font-bold">Submitted At</TableHead>
@@ -325,9 +325,9 @@ export default function AdminDashboard() {
                   responses.map((response, index) => (
                     <TableRow key={response.id || index} className="hover:bg-slate-50/50" data-testid={`response-row-${index}`}>
                       <TableCell className="font-medium">{response.branch}</TableCell>
-                      <TableCell>{response.section_code}</TableCell>
-                      <TableCell className="text-xs font-mono">{response.dms_customer_id}</TableCell>
-                      <TableCell>{response.dms_customer_name}</TableCell>
+                      <TableCell>{response.section}</TableCell>
+                      <TableCell className="text-xs">{response.wd_destination}</TableCell>
+                      <TableCell className="text-xs">{response.dms_id_name}</TableCell>
                       <TableCell className="text-sm">{response.q1_itc_biscuits_sales}</TableCell>
                       <TableCell className="text-sm">{response.q2_total_biscuits_sales}</TableCell>
                       <TableCell className="text-sm text-slate-600">
