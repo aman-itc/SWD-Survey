@@ -49,6 +49,33 @@ export default function SurveyPage() {
     }
   };
 
+  const fetchQuestions = async () => {
+    try {
+      const response = await axios.get(`${API}/admin/questions`);
+      setQuestions(response.data.questions);
+      
+      // Initialize question answers
+      const initialAnswers = {};
+      response.data.questions.forEach(q => {
+        if (q.question_type === "single") {
+          initialAnswers[q.id] = "";
+        } else if (q.question_type === "multi") {
+          initialAnswers[q.id] = [];
+        } else {
+          initialAnswers[q.id] = "";
+        }
+        
+        // Initialize conditional inputs
+        if (q.has_conditional_input) {
+          initialAnswers[`${q.id}_conditional`] = "";
+        }
+      });
+      setQuestionAnswers(initialAnswers);
+    } catch (error) {
+      toast.error("Failed to load questions");
+    }
+  };
+
   const fetchSections = async (branch) => {
     try {
       const response = await axios.get(`${API}/sections/${branch}`);
