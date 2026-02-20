@@ -167,59 +167,72 @@ export default function SurveyPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.q1_itc_biscuits_sales || !formData.q2_total_biscuits_sales || 
-        !formData.q3_itc_nd_sales || !formData.q4_nd_sales_swd) {
-      toast.error("Please answer all questions");
+    // Validate all mandatory questions are answered
+    const unansweredQuestions = questions.filter(q => {
+      if (!q.is_mandatory) return false;
+      
+      const answer = questionAnswers[q.id];
+      if (q.question_type === "multi") {
+        return !answer || answer.length === 0;
+      }
+      return !answer || answer === "";
+    });
+
+    if (unansweredQuestions.length > 0) {
+      toast.error(`Please answer question ${unansweredQuestions[0].question_number}`);
       return;
     }
 
-    if (formData.q5_loyalty_programs.length === 0) {
-      toast.error("Please select at least one option for question 5");
-      return;
-    }
-
-    if (formData.q6_category_handlers.length === 0) {
-      toast.error("Please select at least one option for question 6");
-      return;
-    }
-
-    if (formData.q7_not_purchasing_reasons.length === 0) {
-      toast.error("Please select at least one option for question 7");
-      return;
-    }
-
-    if (formData.q7_not_purchasing_reasons.includes("Relationship issue") && 
-        !formData.q7_relationship_issue_details.trim()) {
-      toast.error("Please provide details for relationship issue");
-      return;
+    // Validate conditional inputs
+    for (const q of questions) {
+      if (q.has_conditional_input && q.conditional_trigger) {
+        const answer = questionAnswers[q.id];
+        if (Array.isArray(answer) && answer.includes(q.conditional_trigger)) {
+          const conditionalAnswer = questionAnswers[`${q.id}_conditional`];
+          if (!conditionalAnswer || conditionalAnswer.trim() === "") {
+            toast.error(`Please provide details for "${q.conditional_trigger}" in question ${q.question_number}`);
+            return;
+          }
+        }
+      }
     }
 
     setLoading(true);
 
     try {
-      const loyaltyPrograms = formData.q5_loyalty_programs.includes("Others") && formData.q5_loyalty_other
-        ? [...formData.q5_loyalty_programs.filter(p => p !== "Others"), `Others: ${formData.q5_loyalty_other}`]
-        : formData.q5_loyalty_programs;
-
+      // Build submission data dynamically
       const submission = {
         branch: formData.branch,
         section: formData.section,
         wd_destination: formData.wd_destination,
         dms_id_name: formData.dms_id_name,
-        q1_itc_biscuits_sales: formData.q1_itc_biscuits_sales,
-        q2_total_biscuits_sales: formData.q2_total_biscuits_sales,
-        q3_itc_nd_sales: formData.q3_itc_nd_sales,
-        q4_nd_sales_swd: formData.q4_nd_sales_swd,
-        q5_loyalty_programs: loyaltyPrograms,
-        q6_category_handlers: formData.q6_category_handlers,
-        q7_not_purchasing_reasons: formData.q7_not_purchasing_reasons,
-        q7_relationship_issue_details: formData.q7_relationship_issue_details || null
       };
+
+      // Add all question answers
+      questions.forEach(q => {
+        let answer = questionAnswers[q.id];
+        
+        // Handle conditional input
+        if (q.has_conditional_input && q.conditional_trigger) {
+          const conditionalAnswer = questionAnswers[`${q.id}_conditional`];
+          if (Array.isArray(answer) && answer.includes(q.conditional_trigger) && conditionalAnswer) {
+            answer = [...answer.filter(a => a !== q.conditional_trigger), `${q.conditional_trigger}: ${conditionalAnswer}`];
+          }
+        }
+        
+        submission[`q${q.question_number}`] = answer;
+        
+        // Add conditional answer separately if exists
+        if (q.has_conditional_input) {
+          submission[`q${q.question_number}_conditional`] = questionAnswers[`${q.id}_conditional`] || null;
+        }
+      });
 
       await axios.post(`${API}/survey/submit`, submission);
       setSuccess(true);
       toast.success("Survey submitted successfully!");
     } catch (error) {
+      console.error("Submission error:", error);
       toast.error("Failed to submit survey. Please try again.");
     } finally {
       setLoading(false);
