@@ -124,8 +124,8 @@ export default function SurveyPage() {
   };
 
   const handleNextStep = () => {
-    if (!formData.branch || !formData.section_code || !formData.dms_customer_id) {
-      toast.error("Please select Branch, Section, and Customer");
+    if (!formData.branch || !formData.section || !formData.wd_destination || !formData.dms_id_name) {
+      toast.error("Please complete all selections");
       return;
     }
     setStep(2);
