@@ -28,23 +28,28 @@ async def load_new_data():
     
     data_list = []
     
-    # Get headers from first row
-    headers = [cell.value for cell in ws[1]]
-    print(f"Headers: {headers}")
-    
-    # Read data starting from row 2
-    for row in ws.iter_rows(min_row=2, values_only=True):
-        if row[0] and row[1] and row[2] and row[3]:  # Ensure all required fields exist
-            data_list.append({
-                "branch": str(row[0]).strip(),
-                "section": str(row[1]).strip(),
-                "wd_destination": str(row[2]).strip(),  # WD Destination Code x DS Name
-                "dms_id_name": str(row[3]).strip()      # DMS ID - Name
-            })
+    # Headers are in row 2, data starts from row 3
+    # Columns: Branch Code, Section, WD Code, DS Name, DMS Name, DMS ID
+    for row in ws.iter_rows(min_row=3, values_only=True):
+        if row[1] and row[2] and row[3] and row[4]:  # Ensure required fields exist
+            # Combine WD Code + DS Name for the WD Destination
+            wd_destination = f"{str(row[3]).strip()} {str(row[4]).strip()}"
+            
+            # Combine DMS Name + DMS ID for the DMS ID - Name
+            dms_id_name = f"{str(row[6]).strip()} - {str(row[5]).strip()}" if row[6] and row[5] else ""
+            
+            if dms_id_name:
+                data_list.append({
+                    "branch": str(row[1]).strip(),
+                    "section": str(row[2]).strip(),
+                    "wd_destination": wd_destination,
+                    "dms_id_name": dms_id_name
+                })
     
     if data_list:
         await db.survey_data.insert_many(data_list)
         print(f"✓ Loaded {len(data_list)} records into database")
+        print(f"Sample record: {data_list[0]}")
     else:
         print("No data found in Excel file")
     
