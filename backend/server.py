@@ -387,6 +387,8 @@ async def delete_question(question_id: str):
             raise HTTPException(status_code=404, detail="Question not found")
         
         return {"success": True, "message": "Question deleted"}
+    except HTTPException:
+        raise
     except Exception as e:
         logging.error(f"Error deleting question: {e}")
         raise HTTPException(status_code=500, detail=str(e))
