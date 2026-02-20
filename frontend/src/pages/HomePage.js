@@ -28,12 +28,9 @@ export default function HomePage() {
           <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl mb-4 shadow-lg animate-in zoom-in duration-500">
             <ClipboardList className="w-10 h-10 text-white" />
           </div>
-          <h1 className="text-5xl md:text-6xl font-bold tracking-tight mb-3 bg-gradient-to-r from-slate-900 via-purple-800 to-slate-900 bg-clip-text text-transparent">
-            ITC SURVEY
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-3 bg-gradient-to-r from-slate-900 via-purple-800 to-slate-900 bg-clip-text text-transparent">
+            Low PDO SWD Survey
           </h1>
-          <p className="text-lg text-slate-600">
-            Retail Outlet Survey Management System
-          </p>
         </div>
 
         {/* Stats Cards */}
