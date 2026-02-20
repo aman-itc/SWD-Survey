@@ -64,21 +64,30 @@ export default function SurveyPage() {
     }
   };
 
-  const fetchCustomers = async (sectionCode) => {
+  const fetchWdDestinations = async (section) => {
     try {
-      const response = await axios.get(`${API}/customers/${sectionCode}`);
-      setCustomers(response.data.customers);
+      const response = await axios.get(`${API}/wd-destinations/${section}`);
+      setWdDestinations(response.data.wd_destinations);
       
       // Also fetch completion stats for this section
-      fetchSectionCompletion(sectionCode);
+      fetchSectionCompletion(section);
     } catch (error) {
-      toast.error("Failed to load customers");
+      toast.error("Failed to load WD destinations");
     }
   };
 
-  const fetchSectionCompletion = async (sectionCode) => {
+  const fetchDmsIds = async (section, wdDestination) => {
     try {
-      const response = await axios.get(`${API}/section-completion/${sectionCode}`);
+      const response = await axios.get(`${API}/dms-ids/${section}/${encodeURIComponent(wdDestination)}`);
+      setDmsIds(response.data.dms_ids);
+    } catch (error) {
+      toast.error("Failed to load DMS IDs");
+    }
+  };
+
+  const fetchSectionCompletion = async (section) => {
+    try {
+      const response = await axios.get(`${API}/section-completion/${section}`);
       setCompletionStats(response.data);
     } catch (error) {
       console.error("Failed to load completion stats");
