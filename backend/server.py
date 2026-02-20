@@ -162,16 +162,16 @@ async def get_dms_ids(section: str, wd_destination: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 # Get section completion stats
-@api_router.get("/section-completion/{section_code}")
-async def get_section_completion(section_code: str):
+@api_router.get("/section-completion/{section}")
+async def get_section_completion(section: str):
     try:
         # Get total DMS IDs in this section
-        total_dms_ids = await db.survey_data.count_documents({"section_code": section_code})
+        total_dms_ids = await db.survey_data.count_documents({"section": section})
         
         # Get unique DMS IDs that have completed surveys in this section
         completed_surveys = await db.survey_responses.distinct(
-            "dms_customer_id", 
-            {"section_code": section_code}
+            "dms_id_name", 
+            {"section": section}
         )
         completed_count = len(completed_surveys)
         
@@ -179,7 +179,7 @@ async def get_section_completion(section_code: str):
         completion_percentage = round((completed_count / total_dms_ids * 100), 1) if total_dms_ids > 0 else 0
         
         return {
-            "section_code": section_code,
+            "section": section,
             "total_dms_ids": total_dms_ids,
             "completed_surveys": completed_count,
             "completion_percentage": completion_percentage
