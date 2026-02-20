@@ -34,9 +34,9 @@ class SurveyDataItem(BaseModel):
 class SurveyResponse(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     branch: str
-    section_code: str
-    dms_customer_id: str
-    dms_customer_name: str
+    section: str
+    wd_destination: str
+    dms_id_name: str
     q1_itc_biscuits_sales: str
     q2_total_biscuits_sales: str
     q3_itc_nd_sales: str
@@ -49,9 +49,9 @@ class SurveyResponse(BaseModel):
 
 class SurveySubmission(BaseModel):
     branch: str
-    section_code: str
-    dms_customer_id: str
-    dms_customer_name: str
+    section: str
+    wd_destination: str
+    dms_id_name: str
     q1_itc_biscuits_sales: str
     q2_total_biscuits_sales: str
     q3_itc_nd_sales: str
